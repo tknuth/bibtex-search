@@ -1,2 +1,4 @@
-# bibtex-search
-Alfred workflow for searching local BibTeX files
+BibTeX Search for Alfred
+========================
+
+![Example](bibtex.png)
