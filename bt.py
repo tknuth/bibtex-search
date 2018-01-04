@@ -24,7 +24,12 @@ def main(wf):
         query = wf.args[0]
     
     def filter_entry(entry):
-        return u"{} {}".format(entry["ID"], entry["title"])
+        return u"{} {} {} {}".format(
+            entry.get("ID"),
+            entry.get("title"),
+            entry.get("booktitle"),
+            entry.get("chapter")
+        )
 
     if query:
         bibliography = wf.filter(query, bibliography, filter_entry)
