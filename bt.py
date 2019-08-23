@@ -2,6 +2,7 @@
 
 import sys
 import os.path
+import json
 from workflow import Workflow
 
 
@@ -10,7 +11,7 @@ def main(wf):
 
     p = os.path.expanduser("~/.bibtex_alfred")
     filepaths = open(p).readlines()
-    
+
     bibliography = []
 
     for filepath in filepaths:
@@ -22,13 +23,14 @@ def main(wf):
 
     if len(wf.args):
         query = wf.args[0]
-    
+
     def filter_entry(entry):
         return u"{} {} {} {}".format(
             entry.get("ID"),
             entry.get("title"),
+            entry.get("author"),
             entry.get("booktitle"),
-            entry.get("chapter")
+            entry.get("chapter"),
         )
 
     if query:
@@ -37,11 +39,12 @@ def main(wf):
     for entry in bibliography:
         try:
             wf.add_item(
-                title=entry["ID"],
-                subtitle=entry["title"],
-                modifier_subtitles={"alt": entry["author"]},
-                arg=entry["ID"],
-                valid=True
+                title=entry["title"],
+                subtitle=entry.get("author"),
+                modifier_subtitles={"alt": entry["ID"]},
+                arg=entry.get("link"),
+                quicklookurl=entry.get("link"),
+                valid=True,
             )
         except:
             pass
@@ -51,5 +54,5 @@ def main(wf):
 
 
 if __name__ == u"__main__":
-    wf = Workflow(libraries=['./lib'])
+    wf = Workflow(libraries=["./lib"])
     sys.exit(wf.run(main))
